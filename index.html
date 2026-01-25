@@ -9,6 +9,7 @@
         :root {
             /* Core Theme Colors */
             --primary: #4f46e5;
+            --brand-red: #C32A31; /* From AYA Logo */
             --bg-deep: #f8fafc;
             --text-main: #1e293b;
             --text-light: #64748b;
@@ -129,6 +130,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
+            height: 100%; /* Uniform height */
         }
 
         .card:hover {
@@ -160,39 +162,34 @@
 
         /* --- SPECIFIC CARD THEMES --- */
         
-        /* 1. MANAGEMENT (Disabled) */
-        .card.disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            filter: grayscale(0.8);
+        /* 1. SCOUT MANAGER (Red Theme - Matches Logo Shield) */
+        .card-manager .icon-box {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: var(--brand-red);
+            box-shadow: 0 10px 20px rgba(195, 42, 49, 0.15);
         }
-        .card.disabled:hover { transform: none; box-shadow: none; }
-        .card.disabled .icon-box { background: #e2e8f0; color: #94a3b8; }
-        .badge {
-            position: absolute; top: 15px; right: 15px;
-            background: #cbd5e1; color: #64748b;
-            font-size: 0.7rem; font-weight: 700;
-            padding: 4px 10px; border-radius: 10px;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
+        .card-manager .cta-arrow { color: var(--brand-red); }
 
-        /* 2. DATABASE (Matches index.html) */
+        /* 2. DATABASE (Blue Theme - Matches Logo Shield) */
         .card-db .icon-box {
             background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
             color: #4f46e5;
             box-shadow: 0 10px 20px rgba(79, 70, 229, 0.15);
         }
+        .card-db .cta-arrow { color: #4f46e5; }
 
-        /* 3. MEDIA (Matches index2.html Gold/Teal vibe) */
+        /* 3. MEDIA (Gold Theme - Matches Luxury UI) */
         .card-media .icon-box {
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             color: #b45309;
             box-shadow: 0 10px 20px rgba(245, 158, 11, 0.15);
         }
+        .card-media .cta-arrow { color: #b45309; }
 
         /* CTA Arrow */
         .cta-arrow {
-            margin-top: 25px;
+            margin-top: auto; /* Pushes to bottom */
+            padding-top: 25px;
             font-weight: 700;
             font-size: 0.9rem;
             display: flex;
@@ -203,8 +200,6 @@
             transition: all 0.3s ease;
         }
         .card:hover .cta-arrow { opacity: 1; transform: translateY(0); }
-        .card-db .cta-arrow { color: #4f46e5; }
-        .card-media .cta-arrow { color: #b45309; }
 
     </style>
 </head>
@@ -224,21 +219,21 @@
 
         <div class="hub-grid">
 
-            <div class="card disabled">
-                <div class="badge">Coming Soon</div>
+            <a href="https://scoutcommander-814369762156.us-west1.run.app/" class="card card-manager" target="_blank">
                 <div class="icon-box">⚙️</div>
                 <h2>Scout Manager</h2>
                 <p>System dashboard for attendance, uniforms, and troop logistics.</p>
-            </div>
+                <div class="cta-arrow">Launch App →</div>
+            </a>
 
-            <a href="index.html" class="card card-db">
+            <a href="Database.html" class="card card-db">
                 <div class="icon-box">📋</div>
                 <h2>Member Database</h2>
                 <p>Submit new scout entries or update existing personal records.</p>
                 <div class="cta-arrow">Access Form →</div>
             </a>
 
-            <a href="index2.html" class="card card-media">
+            <a href="Media.html" class="card card-media">
                 <div class="icon-box">📸</div>
                 <h2>Media Drop</h2>
                 <p>Secure upload portal for event photos, videos, and archives.</p>
