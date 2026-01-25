@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Member Database Update</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&family=Noto+Sans+Armenian:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            --bg-deep: #f8fafc;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --glass-surface: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --input-bg: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans Armenian', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+            min-height: 100vh;
+            background-color: #f1f5f9;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            
+            /* LAYOUT FIX: Ensures vertical stacking and centering */
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* WRAPPER: Keeps everything together */
+        .main-wrapper {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* AMBIENT BACKGROUND */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f6f8fd 0%, #eef2ff 100%);
+            pointer-events: none;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out;
+        }
+        .orb-1 {
+            top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, #818cf8 0%, rgba(129,140,248,0) 70%);
+        }
+        .orb-2 {
+            bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0) 70%);
+            animation-delay: -5s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        /* LOGO STYLING */
+        .logo-img {
+            display: block;
+            width: 130px;
+            height: auto;
+            margin-bottom: -50px; /* Pulls card up into logo */
+            position: relative;
+            z-index: 20;
+            filter: drop-shadow(0 15px 30px rgba(79, 70, 229, 0.25));
+            animation: levitate 6s ease-in-out infinite;
+        }
+        @keyframes levitate {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* GLASS CARD */
+        .card {
+            background: var(--glass-surface);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            width: 100%;
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 
+                0 20px 50px -10px rgba(0,0,0,0.1),
+                0 0 0 1px rgba(255,255,255,0.5) inset;
+            padding: 70px 30px 40px 30px;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box; /* Ensures padding doesn't break width */
+        }
+
+        header { text-align: center; margin-bottom: 40px; position: relative; z-index: 2; }
+        
+        h1 { 
+            font-size: 26px; 
+            margin: 0 0 8px 0; 
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        p.subtitle { margin: 0; color: var(--text-light); font-size: 15px; font-weight: 500; }
+
+        /* SECTIONS */
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 25px;
+        }
+        
+        .section-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            font-weight: 700;
+            background: rgba(79, 70, 229, 0.08);
+            padding: 8px 16px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+        
+        .section-line {
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(79, 70, 229, 0.2), transparent);
+            margin-left: 20px;
+        }
+
+        /* INPUTS */
+        .form-group { margin-bottom: 25px; position: relative; z-index: 2; }
+        
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-light);
+            margin-left: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 16px;
+            border: 1px solid #88888840;
+            border-radius: 20px;
+            background: var(--input-bg);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            box-sizing: border-box;
+            color: var(--text-main);
+            appearance: none;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            background: white;
+            border-color: rgba(79, 70, 229, 0.3);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* SMART CHIPS */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .chip {
+            font-size: 13px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 14px;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .chip:hover {
+            background: white;
+            transform: translateY(-2px);
+            color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* BUTTON */
+        .btn-submit {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 22px;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 24px;
+            cursor: pointer;
+            box-shadow: 0 20px 40px -10px var(--primary-glow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            transition: all 0.4s;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-submit:active { transform: scale(0.98); }
+
+        /* SPINNER */
+        .spinner {
+            width: 24px; height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+            display: none;
+            margin-left: 12px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* SUCCESS OVERLAY */
+        .success-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            z-index: 50;
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .success-overlay.visible { opacity: 1; pointer-events: all; }
+        
+        .success-icon-box {
+            width: 90px; height: 90px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+            margin-bottom: 25px;
+        }
+        .check-icon { font-size: 40px; color: white; }
+
+        @media (min-width: 650px) {
+            .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+            .card { padding: 70px 50px 50px 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="main-wrapper">
+        
+        <img src="AYA logo vahanig.png" alt="Logo" class="logo-img">
+
+        <div class="card">
+            
+            <div class="success-overlay" id="successScreen">
+                <div class="success-icon-box">
+                    <div class="check-icon">✓</div>
+                </div>
+                <h2 style="margin:0 0 10px 0; color:var(--text-main); font-size:24px;">Հաջողություն!</h2>
+                <p style="color:var(--text-light); margin-bottom:30px;">Data Saved Successfully</p>
+                <button onclick="window.location.reload()" style="background:white; border:none; padding:15px 30px; border-radius:15px; box-shadow:0 10px 20px rgba(0,0,0,0.05); color:var(--primary); font-weight:700; cursor:pointer; font-family:inherit;">
+                    + Add Another
+                </button>
+            </div>
+
+            <div class="content">
+                <header>
+                    <h1>Տվյալների Թարմացում</h1>
+                    <p class="subtitle">Member Database Update</p>
+                </header>
+
+                <form id="scoutForm">
+                    <input type="hidden" name="Email" id="hidden_email">
+
+                    <div class="section-header">
+                        <span class="section-label">Personal</span>
+                        <div class="section-line"></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Անուն Ազգանուն (Հայերեն)</label>
+                            <input type="text" name="Անուն ազգանուն։ (Հայերեն)" class="capitalize" placeholder="Արամ Արամյան" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name (English)</label>
+                            <input type="text" name="Անուն ազգանուն։ (Անգլերեն)" class="capitalize" placeholder="Aram Aramyan" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Ծննդյան Թվական / DOB</label>
+                            <input type="date" name="Ծննդյան թվական" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Ծննդավայր / Birthplace</label>
+                            <input type="text" name="Ծննդավայր" id="birthplaceInput" class="capitalize" required>
+                            <div class="chips-container">
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Yerevan')">Yerevan</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Aleppo')">Aleppo</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Beirut')">Beirut</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'USA')">USA</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Էլ. Հասցե / Email Address</label>
+                        <input type="email" id="visible_email" placeholder="email@example.com" required>
+                    </div>
+
+                    <div class="section-header">
+                        <span class="section-label">Parents</span>
+                        <div class="section-line"></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Հոր Անուն / Father's Name</label>
+                            <input type="text" name="Հոր անուն ազգանուն։" class="capitalize">
+                        </div>
+                        <div class="form-group">
+                            <label>Հոր Հեռախոս / Father's Phone</label>
+                            <input type="tel" name="Հոր հեռախոսահամար։" placeholder="+374...">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Մոր Անուն / Mother's Name</label>
+                            <input type="text" name="Մոր անուն ազգանուն։" class="capitalize">
+                        </div>
+                        <div class="form-group">
+                            <label>Մոր Հեռախոս / Mother's Phone</label>
+                            <input type="tel" name="Մոր հեռախոսահամար։" placeholder="+374...">
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <span class="section-label">Details</span>
+                        <div class="section-line"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Տան Հասցե / Home Address</label>
+                        <input type="text" name="Տան հասցե։" id="addrInput" placeholder="District, Street..." required>
+                        <div class="chips-container">
+                            <span class="chip" onclick="addAddress('addrInput', 'Davtashen')">Davtashen</span>
+                            <span class="chip" onclick="addAddress('addrInput', 'Arabkir')">Arabkir</span>
+                            <span class="chip" onclick="addAddress('addrInput', 'Kentron')">Kentron</span>
+                            <span class="chip" onclick="addAddress('addrInput', 'Ajapnyak')">Ajapnyak</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ալերգիա / Health Issues</label>
+                        <textarea name="Ալերգիա կամ առողջական խնդիրներ։" id="healthInput" rows="2" placeholder="Start typing..."></textarea>
+                        <div class="chips-container">
+                            <span class="chip" style="color:#10b981; border-color: #10b981;" onclick="setNone('healthInput')">✅ Չունի / None</span>
+                            <span class="chip" onclick="addHealth('healthInput', 'Փոշի / Dust Allergy')">🤧 Փոշի / Dust</span>
+                            <span class="chip" onclick="addHealth('healthInput', 'Սեզոնային / Seasonal Allergy')">🌸 Սեզոնային / Seasonal</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span>Ուղարկել / SUBMIT</span>
+                        <div class="spinner" id="loader"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ================= CONFIGURATION =================
+    // PASTE YOUR GOOGLE SCRIPT URL HERE
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyclQn0T2OTDQiJNp_GDMlJ_5cVwBOlbD98W7GX-zgoTCBtQvIuviv3jBReR6ZM2dM/exec'; 
+
+    // ================= LOGIC =================
+
+    // 1. SMART ADDRESS
+    function addAddress(id, val) {
+        const input = document.getElementById(id);
+        const current = input.value;
+        let newValue;
+        if(current.length === 0) {
+            newValue = val + ", ";
+        } else if(current.includes(val)) {
+            return;
+        } else {
+            newValue = current + ", " + val;
+        }
+        input.value = newValue;
+        input.focus();
+        const len = input.value.length;
+        input.setSelectionRange(len, len);
+    }
+
+    // 2. HEALTH
+    function setNone(id) {
+        const input = document.getElementById(id);
+        input.value = "Չունի / None";
+        input.style.backgroundColor = "#ecfdf5";
+        setTimeout(()=> input.style.backgroundColor = "var(--input-bg)", 500);
+    }
+
+    function addHealth(id, val) {
+        const input = document.getElementById(id);
+        if(input.value === "Չունի / None") input.value = "";
+        
+        // Append logic
+        if(input.value.length > 0) {
+            input.value += ", " + val;
+        } else {
+            input.value = val;
+        }
+        input.focus();
+    }
+
+    function setValue(id, val) {
+        document.getElementById(id).value = val;
+    }
+
+    // 3. CAPITALIZE
+    document.querySelectorAll('.capitalize').forEach(input => {
+        input.addEventListener('input', function(e) {
+            const words = e.target.value.split(' ');
+            for (let i = 0; i < words.length; i++) {
+                if(words[i].length > 0) {
+                    words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+                }
+            }
+            e.target.value = words.join(' ');
+        });
+    });
+
+    // 4. SYNC EMAIL
+    document.getElementById('visible_email').addEventListener('input', e => {
+        document.getElementById('hidden_email').value = e.target.value;
+    });
+
+    // 5. SUBMIT
+    const form = document.getElementById('scoutForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const loader = document.getElementById('loader');
+    const btnText = submitBtn.querySelector('span');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        submitBtn.disabled = true;
+        btnText.textContent = 'Processing...';
+        loader.style.display = 'block';
+
+        const formData = new FormData(form);
+
+        // DATE CONVERSION YYYY-MM-DD -> DD/MM/YYYY
+        const dateVal = formData.get('Ծննդյան թվական');
+        if (dateVal && dateVal.includes('-')) {
+            const parts = dateVal.split('-');
+            const newDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+            formData.set('Ծննդյան թվական', newDate);
+        }
+
+        fetch(SCRIPT_URL, { method: 'POST', body: formData })
+        .then(response => {
+            document.getElementById('successScreen').classList.add('visible');
+            form.reset();
+        })
+        .catch(error => {
+            alert('Connection Error');
+            submitBtn.disabled = false;
+            btnText.textContent = 'Ուղարկել / SUBMIT';
+            loader.style.display = 'none';
+        });
+    });
+</script>
+
+</body>
+</html>

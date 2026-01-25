@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AYA Scouts Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=Noto+Sans+Armenian:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Core Theme Colors */
+            --primary: #4f46e5;
+            --bg-deep: #f8fafc;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            
+            /* Glass Effects */
+            --glass-surface: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --card-hover: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans Armenian', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+            min-height: 100vh;
+            background-color: #f1f5f9;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- AMBIENT BACKGROUND ANIMATION --- */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f6f8fd 0%, #eef2ff 100%);
+            pointer-events: none;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out;
+        }
+        .orb-1 {
+            top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, #818cf8 0%, rgba(129,140,248,0) 70%);
+        }
+        .orb-2 {
+            bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0) 70%);
+            animation-delay: -5s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+        }
+
+        .logo-img {
+            width: 140px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 15px 30px rgba(79, 70, 229, 0.25));
+            animation: levitate 6s ease-in-out infinite;
+        }
+        @keyframes levitate {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            margin-bottom: 50px;
+            font-weight: 500;
+        }
+
+        /* --- GRID --- */
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 10px;
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--glass-surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 30px -5px rgba(0,0,0,0.05),
+                0 0 0 1px rgba(255,255,255,0.4) inset;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: var(--card-hover);
+            box-shadow: 
+                0 25px 50px -12px rgba(79, 70, 229, 0.25),
+                0 0 0 1px rgba(255,255,255,0.8) inset;
+        }
+
+        /* Icon Container */
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover .icon-box { transform: scale(1.1) rotate(3deg); }
+
+        /* Typography */
+        .card h2 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+        .card p { font-size: 0.95rem; color: var(--text-light); margin-top: 8px; line-height: 1.5; }
+
+        /* --- SPECIFIC CARD THEMES --- */
+        
+        /* 1. MANAGEMENT (Disabled) */
+        .card.disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            filter: grayscale(0.8);
+        }
+        .card.disabled:hover { transform: none; box-shadow: none; }
+        .card.disabled .icon-box { background: #e2e8f0; color: #94a3b8; }
+        .badge {
+            position: absolute; top: 15px; right: 15px;
+            background: #cbd5e1; color: #64748b;
+            font-size: 0.7rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* 2. DATABASE (Matches index.html) */
+        .card-db .icon-box {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            color: #4f46e5;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.15);
+        }
+
+        /* 3. MEDIA (Matches index2.html Gold/Teal vibe) */
+        .card-media .icon-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #b45309;
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.15);
+        }
+
+        /* CTA Arrow */
+        .cta-arrow {
+            margin-top: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .card:hover .cta-arrow { opacity: 1; transform: translateY(0); }
+        .card-db .cta-arrow { color: #4f46e5; }
+        .card-media .cta-arrow { color: #b45309; }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="main-wrapper">
+        
+        <img src="AYA logo vahanig.png" alt="AYA Scouts" class="logo-img">
+        
+        <h1>AYA SCOUTS HUB</h1>
+        <p class="subtitle">Central Command & Operational Resources</p>
+
+        <div class="hub-grid">
+
+            <div class="card disabled">
+                <div class="badge">Coming Soon</div>
+                <div class="icon-box">⚙️</div>
+                <h2>Scout Manager</h2>
+                <p>System dashboard for attendance, uniforms, and troop logistics.</p>
+            </div>
+
+            <a href="index.html" class="card card-db">
+                <div class="icon-box">📋</div>
+                <h2>Member Database</h2>
+                <p>Submit new scout entries or update existing personal records.</p>
+                <div class="cta-arrow">Access Form →</div>
+            </a>
+
+            <a href="index2.html" class="card card-media">
+                <div class="icon-box">📸</div>
+                <h2>Media Drop</h2>
+                <p>Secure upload portal for event photos, videos, and archives.</p>
+                <div class="cta-arrow">Open Uploader →</div>
+            </a>
+
+        </div>
+
+        <footer style="margin-top: 50px; font-size: 0.8rem; color: var(--text-light); opacity: 0.6;">
+            &copy; 2026 AYA Scouts. All systems operational.
+        </footer>
+
+    </div>
+
+</body>
+</html>
