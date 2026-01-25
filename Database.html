@@ -345,10 +345,9 @@
                             <label>Ծննդավայր / Birthplace</label>
                             <input type="text" name="Ծննդավայր" id="birthplaceInput" class="capitalize" required>
                             <div class="chips-container">
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Yerevan')">Yerevan</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Aleppo')">Aleppo</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Beirut')">Beirut</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'USA')">USA</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Yerevan')">Yerevan, Armenia</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Aleppo')">Aleppo, Syria</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Beirut')">Beirut, Lebanon</span>
                             </div>
                         </div>
                     </div>
@@ -506,7 +505,7 @@
         const dateVal = formData.get('Ծննդյան թվական');
         if (dateVal && dateVal.includes('-')) {
             const parts = dateVal.split('-');
-            const newDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+            const newDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
             formData.set('Ծննդյան թվական', newDate);
         }
 
@@ -526,4 +525,5 @@
 
 </body>
 </html>
+
 
