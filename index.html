@@ -3,250 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AYA Scouts Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&family=Noto+Sans+Armenian:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>AYA Scouts Command</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Core Theme Colors */
-            --primary: #4f46e5;
-            --brand-red: #C32A31; /* From AYA Logo */
-            --bg-deep: #f8fafc;
+            /* --- LIGHT THEME (Default) --- */
+            --bg-grad-start: #f8fafc;
+            --bg-grad-end: #e2e8f0;
             --text-main: #1e293b;
-            --text-light: #64748b;
+            --text-sub: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --card-shadow: 0 20px 40px -10px rgba(148, 163, 184, 0.3);
+            --accent-glow: rgba(79, 70, 229, 0.15);
             
-            /* Glass Effects */
-            --glass-surface: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.85);
-            --card-hover: rgba(255, 255, 255, 0.95);
+            /* Brands */
+            --brand-blue: #4f46e5;
+            --brand-red: #dc2626;
+            --brand-gold: #d97706;
+            
+            /* Transition settings */
+            --trans-speed: 0.4s;
         }
 
+        /* --- DARK THEME OVERRIDES --- */
+        body.dark-mode {
+            --bg-grad-start: #0f172a;
+            --bg-grad-end: #020617;
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+            --accent-glow: rgba(79, 70, 229, 0.3);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: 'Outfit', 'Noto Sans Armenian', sans-serif;
+            font-family: 'Outfit', sans-serif;
             margin: 0;
             padding: 20px;
-            color: var(--text-main);
             min-height: 100vh;
-            background-color: #f1f5f9;
-            overflow-x: hidden;
+            background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            transition: background var(--trans-speed), color var(--trans-speed);
+            overflow-x: hidden;
         }
 
-        /* --- AMBIENT BACKGROUND ANIMATION --- */
-        .ambient-light {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f6f8fd 0%, #eef2ff 100%);
-            pointer-events: none;
+        /* --- AMBIENT ORBS --- */
+        .ambient-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; overflow: hidden;
         }
         .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 20s infinite ease-in-out;
+            position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5;
+            transition: background var(--trans-speed);
         }
-        .orb-1 {
-            top: -10%; left: -10%; width: 50vw; height: 50vw;
-            background: radial-gradient(circle, #818cf8 0%, rgba(129,140,248,0) 70%);
-        }
-        .orb-2 {
-            bottom: -10%; right: -10%; width: 60vw; height: 60vw;
-            background: radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0) 70%);
-            animation-delay: -5s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, -30px) scale(1.1); }
+        .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--brand-blue); animation: float 20s infinite ease-in-out; }
+        .orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: var(--brand-red); animation: float 25s infinite ease-in-out reverse; }
+        
+        @keyframes float { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(30px, -30px); } }
+
+        /* --- HEADER & CONTROLS --- */
+        .top-bar {
+            position: absolute; top: 20px; right: 20px; z-index: 100;
+            display: flex; gap: 15px; align-items: center;
         }
 
-        /* --- MAIN LAYOUT --- */
-        .main-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 1100px;
+        .theme-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            width: 44px; height: 44px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .theme-toggle:active { transform: scale(0.9); }
+
+        .system-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 8px 16px; border-radius: 20px;
+            backdrop-filter: blur(10px);
+            display: flex; gap: 8px; align-items: center;
+            color: var(--text-sub);
+        }
+        .dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
+
+        /* --- MAIN CONTENT --- */
+        .wrapper {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 1000px;
             text-align: center;
         }
 
-        .logo-img {
-            width: 140px;
-            height: auto;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 15px 30px rgba(79, 70, 229, 0.25));
+        .logo-box {
+            margin-bottom: 10px;
             animation: levitate 6s ease-in-out infinite;
         }
-        @keyframes levitate {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        .logo-img { width: 120px; height: auto; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
+        
+        @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, #1e293b 0%, #4f46e5 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 2.8rem; font-weight: 800; margin: 0; letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--text-main) 30%, var(--text-sub) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            font-size: 1.1rem; color: var(--text-sub); margin-top: 10px; margin-bottom: 50px; font-weight: 500;
         }
 
-        p.subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-top: 10px;
-            margin-bottom: 50px;
-            font-weight: 500;
-        }
-
-        /* --- GRID --- */
-        .hub-grid {
+        /* --- GRID & CARDS --- */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 0 10px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 10px;
+            perspective: 1000px; /* For 3D Tilt */
         }
 
-        /* --- CARDS --- */
         .card {
-            background: var(--glass-surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 40px 30px;
+            padding: 35px 25px;
             text-decoration: none;
             color: var(--text-main);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 10px 30px -5px rgba(0,0,0,0.05),
-                0 0 0 1px rgba(255,255,255,0.4) inset;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            height: 100%; /* Uniform height */
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.1s ease, box-shadow 0.3s ease; /* Fast transform for tilt */
+            height: 100%;
+        }
+        
+        /* Card Highlight Gradient */
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0.5;
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            background: var(--card-hover);
-            box-shadow: 
-                0 25px 50px -12px rgba(79, 70, 229, 0.25),
-                0 0 0 1px rgba(255,255,255,0.8) inset;
-        }
-
-        /* Icon Container */
         .icon-box {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            margin-bottom: 25px;
-            transition: transform 0.3s ease;
+            font-size: 2.5rem; margin-bottom: 20px;
+            width: 70px; height: 70px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+
+        .card:hover .icon-box { transform: scale(1.15) rotate(-5deg); }
+
+        .card h2 { margin: 0; font-size: 1.3rem; font-weight: 700; }
+        .card p { font-size: 0.9rem; color: var(--text-sub); margin-top: 10px; line-height: 1.5; }
+
+        /* Status Badge */
+        .status {
+            margin-top: auto; padding-top: 25px;
+            font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+            display: flex; align-items: center; gap: 6px; opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .card:hover .status { opacity: 1; }
+
+        /* SPECIFIC THEMES */
+        .t-red { color: var(--brand-red); }
+        .t-red .icon-box { background: rgba(220, 38, 38, 0.1); }
         
-        .card:hover .icon-box { transform: scale(1.1) rotate(3deg); }
-
-        /* Typography */
-        .card h2 { margin: 0; font-size: 1.4rem; font-weight: 700; }
-        .card p { font-size: 0.95rem; color: var(--text-light); margin-top: 8px; line-height: 1.5; }
-
-        /* --- SPECIFIC CARD THEMES --- */
+        .t-blue { color: var(--brand-blue); }
+        .t-blue .icon-box { background: rgba(79, 70, 229, 0.1); }
         
-        /* 1. SCOUT MANAGER (Red Theme - Matches Logo Shield) */
-        .card-manager .icon-box {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            color: var(--brand-red);
-            box-shadow: 0 10px 20px rgba(195, 42, 49, 0.15);
-        }
-        .card-manager .cta-arrow { color: var(--brand-red); }
+        .t-gold { color: var(--brand-gold); }
+        .t-gold .icon-box { background: rgba(217, 119, 6, 0.1); }
 
-        /* 2. DATABASE (Blue Theme - Matches Logo Shield) */
-        .card-db .icon-box {
-            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-            color: #4f46e5;
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.15);
-        }
-        .card-db .cta-arrow { color: #4f46e5; }
-
-        /* 3. MEDIA (Gold Theme - Matches Luxury UI) */
-        .card-media .icon-box {
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            color: #b45309;
-            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.15);
-        }
-        .card-media .cta-arrow { color: #b45309; }
-
-        /* CTA Arrow */
-        .cta-arrow {
-            margin-top: auto; /* Pushes to bottom */
-            padding-top: 25px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-        }
-        .card:hover .cta-arrow { opacity: 1; transform: translateY(0); }
+        footer { margin-top: 60px; font-size: 0.8rem; color: var(--text-sub); opacity: 0.6; }
 
     </style>
 </head>
 <body>
 
-    <div class="ambient-light">
+    <div class="ambient-layer">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
     </div>
 
-    <div class="main-wrapper">
-        
-        <img src="AYA logo vahanig.png" alt="AYA Scouts" class="logo-img">
-        
-        <h1>AYA SCOUTS HUB</h1>
-        <p class="subtitle">Central Command & Operational Resources</p>
+    <div class="top-bar">
+        <div class="system-pill">
+            <div class="dot"></div>
+            <span id="clock">12:00</span>
+        </div>
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+            <span id="theme-icon">☀️</span>
+        </div>
+    </div>
 
-        <div class="hub-grid">
+    <div class="wrapper">
+        
+        <div class="logo-box">
+            <img src="AYA logo vahanig.png" alt="AYA Logo" class="logo-img">
+        </div>
 
-            <a href="https://scoutcommander-814369762156.us-west1.run.app/" class="card card-manager" target="_blank">
+        <h1>AYA COMMAND</h1>
+        <p class="subtitle">Scout Operational Hub</p>
+
+        <div class="grid">
+
+            <a href="https://scoutcommander-814369762156.us-west1.run.app/" target="_blank" class="card t-red tilt-card">
                 <div class="icon-box">⚙️</div>
                 <h2>Scout Manager</h2>
-                <p>System dashboard for attendance, uniforms, and troop logistics.</p>
-                <div class="cta-arrow">Launch App →</div>
+                <p>Attendance tracking, uniform inventory, and troop logistics system.</p>
+                <div class="status">Launch App &rarr;</div>
             </a>
 
-            <a href="Database.html" class="card card-db">
-                <div class="icon-box">📋</div>
+            <a href="Database.html" class="card t-blue tilt-card">
+                <div class="icon-box">👥</div>
                 <h2>Member Database</h2>
-                <p>Submit new scout entries or update existing personal records.</p>
-                <div class="cta-arrow">Access Form →</div>
+                <p>Register new scouts, update medical records, and manage profiles.</p>
+                <div class="status">Access Form &rarr;</div>
             </a>
 
-            <a href="Media.html" class="card card-media">
+            <a href="Media.html" class="card t-gold tilt-card">
                 <div class="icon-box">📸</div>
                 <h2>Media Drop</h2>
-                <p>Secure upload portal for event photos, videos, and archives.</p>
-                <div class="cta-arrow">Open Uploader →</div>
+                <p>Secure upload portal for camp photos, event videos, and archives.</p>
+                <div class="status">Open Cloud &rarr;</div>
             </a>
 
         </div>
 
-        <footer style="margin-top: 50px; font-size: 0.8rem; color: var(--text-light); opacity: 0.6;">
-            &copy; 2026 AYA Scouts. All systems operational.
+        <footer>
+            &copy; 2026 AYA Scouts. System Online.
         </footer>
 
     </div>
 
+    <script>
+        // --- 1. CLOCK FUNCTIONALITY ---
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- 2. THEME TOGGLE ---
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        
+        // Check local storage
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            icon.textContent = '🌙';
+        }
+
+        function toggleTheme() {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            icon.textContent = isDark ? '🌙' : '☀️';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // --- 3. 3D TILT EFFECT ---
+        const cards = document.querySelectorAll('.tilt-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Calculate rotation (max 10 degrees)
+                const xPct = (x / rect.width) - 0.5;
+                const yPct = (y / rect.height) - 0.5;
+                const xRot = yPct * -10; // Rotate X based on Y position
+                const yRot = xPct * 10;  // Rotate Y based on X position
+
+                card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+    </script>
 </body>
 </html>
