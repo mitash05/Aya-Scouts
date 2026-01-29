@@ -424,7 +424,19 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyclQn0T2OTDQiJNp_GDMlJ_5cVwBOlbD98W7GX-zgoTCBtQvIuviv3jBReR6ZM2dM/exec'; 
 
     // ================= LOGIC =================
+// 0. PHONE FORMATTER
+function formatPhone(input) {
+    // Strip all non-numbers
+    let x = input.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,2})(\d{0,2})(\d{0,2})/);
+    // Re-assemble in (XXX) XX-XX-XX format
+    input.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '') + (x[4] ? '-' + x[4] : '');
+}
 
+// Attach to all phone inputs automatically
+document.querySelectorAll('input[type="tel"]').forEach(input => {
+    input.addEventListener('input', (e) => formatPhone(e.target));
+});
+    
     // 1. SMART ADDRESS
     function addAddress(id, val) {
         const input = document.getElementById(id);
@@ -452,17 +464,25 @@
     }
 
     function addHealth(id, val) {
-        const input = document.getElementById(id);
-        if(input.value === "Չունի / None") input.value = "";
-        
-        // Append logic
-        if(input.value.length > 0) {
-            input.value += ", " + val;
-        } else {
-            input.value = val;
-        }
-        input.focus();
+    const input = document.getElementById(id);
+    let current = input.value;
+    
+    // If it says "None", clear it first
+    if(current.includes("Չունի / None")) current = "";
+    
+    // Split existing values into an array to check for duplicates
+    // This splits by comma AND removes extra spaces
+    let parts = current.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    
+    // Only add if it's not already there
+    if(!parts.includes(val)) {
+        parts.push(val);
     }
+    
+    // Join back together
+    input.value = parts.join(', ');
+    input.focus();
+}
 
     function setValue(id, val) {
         document.getElementById(id).value = val;
@@ -525,5 +545,6 @@
 
 </body>
 </html>
+
 
 
