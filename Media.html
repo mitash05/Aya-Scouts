@@ -8,17 +8,20 @@
     <style>
         /* --- LUXURY GLASS THEME --- */
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Deep Ocean */
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --text-main: #ffffff;
-            --text-muted: #b3c5cd;
-            --accent-gold: #d4af37; /* Luxury Gold */
-            --success-green: #2ecc71;
-            --error-red: #e74c3c;
-            --input-bg: rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 15px 35px rgba(0,0,0,0.4);
-        }
+    /* MATCHING INDEX.HTML DARK MODE */
+    --bg-gradient: linear-gradient(135deg, #0f172a, #020617);
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    
+    --accent-gold: #d97706; /* Matches the "Gold" brand color from Index */
+    --success-green: #2ecc71;
+    --error-red: #e74c3c;
+    --input-bg: rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+}
 
         body {
             font-family: 'Montserrat', sans-serif;
@@ -306,8 +309,8 @@
     // -----------------------------------------------------------
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzal3ftPX0607ZhcjMtKx02LutBiiGnHICsCrMp2EsndaZgQaIpoOtqAw6f9IXPY_wTRQ/exec"; 
 
-    const CONCURRENT_UPLOADS = 5;
-    const MAX_SIZE_MB = 35; // Standard script limit
+    const CONCURRENT_UPLOADS = 3;
+    const MAX_SIZE_MB = 30; // Standard script limit
 
     let currentMode = 'new';
     let fileQueue = [];
@@ -335,12 +338,24 @@
     }
 
     // --- FILE SELECTION ---
-    document.getElementById('fileInput').addEventListener('change', function() {
-        const files = Array.from(this.files);
-        if (files.length === 0) return;
-        fileQueue = fileQueue.concat(files);
-        renderGallery();
+   document.getElementById('fileInput').addEventListener('change', function() {
+    const files = Array.from(this.files);
+    
+    // VALIDATION: Filter out huge files immediately
+    const validFiles = files.filter(f => {
+        if(f.size > MAX_SIZE_MB * 1024 * 1024) {
+            alert(`⚠️ File "${f.name}" is too large! Max size is ${MAX_SIZE_MB}MB.`);
+            return false;
+        }
+        return true;
     });
+
+    if (validFiles.length === 0) return;
+    
+    // Add valid files to queue
+    fileQueue = fileQueue.concat(validFiles);
+    renderGallery();
+});
 
     function renderGallery() {
         const gallery = document.getElementById('gallery');
