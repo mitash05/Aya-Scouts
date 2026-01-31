@@ -54,11 +54,14 @@
           margin-bottom: 80px;
         }
 
-        /* INPUTS - UPDATED SIZING */
+        /* INPUTS - CRITICAL FIX FOR PADDING */
         input, select {
           width: 100%; 
-          padding: 18px 20px; /* Increased padding */
-          font-size: 18px;    /* Increased font size */
+          /* Force padding to clear the rounded corners */
+          padding: 16px 35px !important; 
+          padding-left: 35px !important;
+          
+          font-size: 18px;
           border: 1px solid rgba(136, 136, 136, 0.2);
           border-radius: 20px; 
           background: var(--input-bg); 
@@ -66,18 +69,37 @@
           font-family: inherit; 
           transition: 0.3s; 
           outline: none;
+          box-sizing: border-box;
+          
+          /* Remove default browser styling that ignores padding */
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
         }
+        
         input:focus, select:focus {
-          background: white; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-          border-color: rgba(79, 70, 229, 0.3); transform: translateY(-1px);
+          background: white; 
+          box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+          border-color: rgba(79, 70, 229, 0.3); 
+          transform: translateY(-1px);
         }
+
+        /* Add custom arrow for select since we removed default appearance */
+        select {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right 1rem center;
+          background-repeat: no-repeat;
+          background-size: 1.5em 1.5em;
+          padding-right: 2.5rem !important;
+        }
+
         label {
           display: block; 
-          font-size: 14px;    /* Increased label size */
+          font-size: 14px;
           font-weight: 700; 
-          margin-bottom: 10px; /* Increased spacing */
+          margin-bottom: 10px;
           color: var(--text-light); 
-          margin-left: 12px; 
+          margin-left: 20px;
           text-transform: uppercase; 
           letter-spacing: 0.8px;
         }
@@ -362,7 +384,7 @@ ${details ? `Մանրամասներ: ${details}` : ''}
                     <div className="watermark">PAID</div>
                     <div className="flex flex-col items-center mb-4">
                         <img 
-                            src="AYA logo vahanig.png" 
+                            src="AYA.png" 
                             alt="AYA Logo" 
                             className="h-20 object-contain mb-2"
                             onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
@@ -420,7 +442,7 @@ ${details ? `Մանրամասներ: ${details}` : ''}
 
                 <div className="max-w-md mx-auto p-6 pt-20">
                     <div className="text-center mb-8 relative z-10">
-                        <img src="AYA logo vahanig.png" alt="Logo" className="w-24 mx-auto mb-2 drop-shadow-xl" style={{animation:'levitate 6s ease-in-out infinite'}} />
+                        <img src="AYA.png" alt="Logo" className="w-24 mx-auto mb-2 drop-shadow-xl" style={{animation:'levitate 6s ease-in-out infinite'}} />
                         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">Անդորրագրի Ստեղծում</h1>
                         <p className="text-slate-400 text-sm font-medium">Ֆինանսական Գործիք</p>
                     </div>
