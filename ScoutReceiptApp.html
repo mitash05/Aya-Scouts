@@ -130,14 +130,21 @@
         }
         .nav-item.active { background: #1e293b; color: white; transform: translateY(-5px); }
 
-        /* PRINT / PDF STYLES */
+        /* PRINT / PDF STYLES - FIXED FOR CENTERING AND FILLING PAGE */
         @media print {
+          @page { margin: 0; size: auto; }
           body * { visibility: hidden; }
           #receipt-container, #receipt-container * { visibility: visible; }
           #receipt-container { 
-            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); 
-            width: 100%; max-width: 400px; 
-            border: 1px solid #ddd;
+            position: absolute; 
+            left: 50%; 
+            top: 50%; 
+            /* Scale up 1.6x to fill the page comfortably */
+            transform: translate(-50%, -50%) scale(1.6);
+            width: 450px; /* Base width */
+            margin: 0;
+            box-shadow: none;
+            border: 1px solid #eee;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
           }
@@ -146,7 +153,7 @@
     </style>
 </head>
 <body>
-
+    
 <div id="root"></div>
 
 <script type="text/babel">
