@@ -8,18 +8,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Noto+Sans+Armenian:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        /* GLOBAL STYLES */
+        /* GLOBAL STYLES & GLASSMORPHISM */
         :root {
           --primary: #4f46e5;
+          --primary-glow: rgba(79, 70, 229, 0.4);
           --text-main: #1e293b;
+          --text-light: #64748b;
           --glass-surface: rgba(255, 255, 255, 0.65);
+          --glass-border: rgba(255, 255, 255, 0.8);
+          --input-bg: rgba(255, 255, 255, 0.6);
         }
         body {
           font-family: 'Outfit', 'Noto Sans Armenian', sans-serif;
@@ -29,7 +33,7 @@
           min-height: 100vh;
         }
         
-        /* BACKGROUND ANIMATION */
+        /* AMBIENT BACKGROUND */
         .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 20s infinite ease-in-out; }
         .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #818cf8 0%, rgba(129,140,248,0) 70%); }
@@ -41,41 +45,58 @@
           background: var(--glass-surface);
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
-          border: 1px solid rgba(255, 255, 255, 0.8);
-          box-shadow: 0 20px 50px -10px rgba(0,0,0,0.1);
+          border: 1px solid var(--glass-border);
+          box-shadow: 0 20px 50px -10px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset;
           border-radius: 32px;
           padding: 30px;
           margin-bottom: 80px;
         }
 
-        /* INPUTS */
+        /* INPUTS - REFINED PADDING */
         input, select {
           width: 100%; 
           padding: 16px 12px 16px 24px !important;
           font-size: 18px;
           border: 1px solid rgba(136, 136, 136, 0.2);
           border-radius: 20px; 
-          background: rgba(255, 255, 255, 0.6); 
+          background: var(--input-bg); 
           color: var(--text-main);
+          font-family: inherit; 
+          transition: 0.3s; 
           outline: none;
+          box-sizing: border-box;
           -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
         }
+        
+        input[type="date"] { display: block; }
+        
         input:focus, select:focus {
           background: white; 
           box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+          border-color: rgba(79, 70, 229, 0.3); 
+          transform: translateY(-1px);
         }
 
-        /* CUSTOM SELECT ARROW */
+        /* Custom arrow for Select */
         select {
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
           background-position: right 1rem center;
           background-repeat: no-repeat;
           background-size: 1.5em 1.5em;
+          padding-right: 2.5rem !important;
         }
 
         label {
-          display: block; font-size: 14px; font-weight: 700; margin-bottom: 10px;
-          color: #64748b; margin-left: 20px; text-transform: uppercase; letter-spacing: 0.8px;
+          display: block; 
+          font-size: 14px;
+          font-weight: 700; 
+          margin-bottom: 10px;
+          color: var(--text-light); 
+          margin-left: 20px;
+          text-transform: uppercase; 
+          letter-spacing: 0.8px;
         }
 
         /* BUTTONS */
@@ -83,20 +104,31 @@
           background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
           color: white; border: none; width: 100%; padding: 22px;
           font-size: 17px; font-weight: 700; border-radius: 24px;
-          cursor: pointer; box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.4);
-          display: flex; align-items: center; justify-content: center; gap: 10px;
+          cursor: pointer; box-shadow: 0 10px 30px -5px var(--primary-glow);
+          transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .btn-primary:active { transform: scale(0.98); }
         .btn-secondary {
           background: white; color: var(--text-main); border: 1px solid rgba(0,0,0,0.1);
           padding: 18px; border-radius: 18px; font-weight: 600; cursor: pointer;
-          display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+          display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;
         }
+        .btn-secondary:hover { background: #f8fafc; transform: translateY(-2px); }
 
         /* RECEIPT VISUALS */
+        .receipt-container {
+            padding: 10px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
         .receipt-paper {
-          background: white; padding: 30px; border-radius: 4px;
+          background: white !important; padding: 30px; border-radius: 4px;
           box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid #1e293b;
           position: relative; overflow: hidden;
+          /* Ensure background graphics print */
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
         .watermark {
           position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
@@ -110,7 +142,7 @@
         .chip {
           padding: 10px 14px; border-radius: 12px; font-size: 14px; font-weight: 600;
           border: 1px solid rgba(79, 70, 229, 0.2); background: rgba(79, 70, 229, 0.05);
-          color: var(--primary); cursor: pointer;
+          color: var(--primary); cursor: pointer; transition: 0.2s;
         }
         .chip.active { background: var(--primary); color: white; }
 
@@ -128,32 +160,25 @@
           display: flex; align-items: center; justify-content: center;
           color: #94a3b8; transition: 0.3s; cursor: pointer;
         }
-        .nav-item.active { background: #1e293b; color: white; transform: translateY(-5px); }
+        .nav-item.active { background: #1e293b; color: white; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        /* PRINT / PDF STYLES - FIXED FOR CENTERING AND FILLING PAGE */
+        /* PRINT STYLES */
         @media print {
-          @page { margin: 0; size: auto; }
           body * { visibility: hidden; }
-          #receipt-container, #receipt-container * { visibility: visible; }
-          #receipt-container { 
-            position: absolute; 
-            left: 50%; 
-            top: 50%; 
-            /* Scale up 1.6x to fill the page comfortably */
-            transform: translate(-50%, -50%) scale(1.6);
-            width: 450px; /* Base width */
-            margin: 0;
-            box-shadow: none;
-            border: 1px solid #eee;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+          .receipt-paper, .receipt-paper * { visibility: visible; }
+          .receipt-paper { 
+              position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: 1px solid #ddd;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
           }
-          button { display: none !important; }
+          .receipt-container { background: white; }
         }
+        
+        @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
 <body>
-    
+
 <div id="root"></div>
 
 <script type="text/babel">
@@ -166,7 +191,6 @@
         Save: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>,
         Image: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
         FilePdf: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>,
-        Shield: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
         GoogleDrive: (props) => (
             <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 87.3 78" fill="currentColor">
                 <path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066DA"/>
@@ -179,7 +203,7 @@
         )
     };
 
-    // --- CONFIG ---
+    // --- CONFIGURATION ---
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw_oA7qTCe2fnV-hbn_-7Vl1o8_yP-x2f8laFPauvo87A4XssiGq5tBbvvYTmEGrSlv/exec'; 
     const DRIVE_FOLDER_ID = '1UZTzEd9AvjZArsn678BrrkgfELuyqvuK';
 
@@ -189,20 +213,22 @@
         const [history, setHistory] = useState([]);
         const [generatedReceipt, setGeneratedReceipt] = useState(null);
 
-        // Constants
+        // Armenian Constants
         const MONTHS = ['Հուն', 'Փետ', 'Մարտ', 'Ապր', 'Մայ', 'Հունիս', 'Հուլ', 'Օգոս', 'Սեպ', 'Հոկ', 'Նոյ', 'Դեկ'];
         const UNIFORM_ITEMS = ['Գլխարկ', 'Փողկապ', 'Օղակ', 'Շապիկ', 'Սվիտեր', 'Թի-Շապիկ'];
         const ITEMS_WITH_SIZE = ['Շապիկ', 'Սվիտեր', 'Թի-Շապիկ'];
         const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+        const PREFIXES = ['SA', 'KA', 'YK'];
 
         const [formData, setFormData] = useState({
-            prefix: 'SA', // Default Prefix
+            prefix: 'SA',
             scoutName: '',
             amount: '',
             paymentDate: new Date().toISOString().split('T')[0],
             type: 'Անդամավճար',
             paidBy: 'Ծնող',
             leaderName: '',
+            notes: '',
             membershipMonths: [],
             uniformItem: 'Շապիկ',
             uniformSize: 'M'
@@ -211,15 +237,30 @@
         useEffect(() => {
             const savedHistory = localStorage.getItem('scout_payment_history');
             if (savedHistory) setHistory(JSON.parse(savedHistory));
+            
+            // Generate a unique device signature if not exists (To prevent collision)
+            if(!localStorage.getItem('device_sig')) {
+                const sig = Math.floor(Math.random() * 90 + 10); // Random 10-99
+                localStorage.setItem('device_sig', sig.toString());
+            }
         }, []);
 
-        // --- ID GENERATION LOGIC ---
-        const generateTxId = (prefix) => {
-            let currentSeq = parseInt(localStorage.getItem('scout_receipt_sequence') || '0');
+        const generateTxId = (selectedPrefix) => {
+            // Get sequence SPECIFIC to the selected prefix (SA, KA, YK)
+            const storageKey = `scout_receipt_sequence_${selectedPrefix}`;
+            let currentSeq = parseInt(localStorage.getItem(storageKey) || '0');
             let nextSeq = currentSeq + 1;
-            localStorage.setItem('scout_receipt_sequence', nextSeq.toString());
+            
+            // Save new sequence
+            localStorage.setItem(storageKey, nextSeq.toString());
+            
+            // Format: AYA-SA-0001
             const seqStr = nextSeq.toString().padStart(4, '0');
-            return `AYA-${prefix}-${seqStr}`;
+            
+            // Get Device Signature (To prevent duplicate AYA-SA-0001 on different phones)
+            const devSig = localStorage.getItem('device_sig') || '00';
+            
+            return `AYA-${selectedPrefix}-${seqStr}-${devSig}`;
         };
 
         const handleInputChange = (e) => {
@@ -238,7 +279,7 @@
         };
 
         const syncToCloud = async (receiptData) => {
-            if (!GOOGLE_SCRIPT_URL) return 'Local Only';
+            if (!GOOGLE_SCRIPT_URL) return 'Offline/Local Only';
             try {
                 let detailedType = receiptData.type;
                 if (receiptData.type === 'Անդամավճար' && receiptData.membershipMonths?.length > 0) {
@@ -262,10 +303,10 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                return 'Saved to Cloud';
+                return 'Sent to Sheet & Drive';
             } catch (error) {
                 console.error("Cloud Error", error);
-                return 'Cloud Error';
+                return 'Cloud Error (Saved Locally)';
             }
         };
 
@@ -273,9 +314,12 @@
             e.preventDefault();
             setLoading(true);
 
+            // Generate ID based on the selected Prefix
+            const newId = generateTxId(formData.prefix);
+
             const newReceipt = {
                 ...formData,
-                id: generateTxId(formData.prefix), // Pass selected prefix
+                id: newId,
                 timestamp: new Date().toISOString() 
             };
 
@@ -295,29 +339,7 @@
             const status = await syncToCloud(generatedReceipt);
             setGeneratedReceipt(prev => ({ ...prev, status: status }));
             setLoading(false);
-            alert("Sent to Google Drive!");
-        };
-
-        // --- SAVE IMAGE FUNCTION ---
-        const handleSaveImage = () => {
-            const receiptElement = document.getElementById('receipt-container');
-            if(!receiptElement) return;
-
-            html2canvas(receiptElement, {
-                scale: 3, // High resolution
-                backgroundColor: null, // Transparent border
-                useCORS: true 
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Receipt_${generatedReceipt.id}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        };
-
-        // --- PRINT PDF FUNCTION ---
-        const handlePrintPDF = () => {
-            window.print();
+            alert("Պահանջը ուղարկված է Google Drive!");
         };
 
         const getDetailsString = (data) => {
@@ -336,15 +358,29 @@
             return '';
         };
 
+        const handleSaveImage = () => {
+            const element = document.querySelector(".receipt-paper");
+            if(element) {
+                html2canvas(element, { scale: 2, useCORS: true }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `Receipt_${generatedReceipt.id}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                });
+            }
+        };
+
+        const handleSendPDF = () => {
+            window.print();
+        };
+
         const resetForm = () => {
             setFormData({
-                prefix: formData.prefix, // Keep last selection
+                ...formData,
                 scoutName: '',
                 amount: '',
-                paymentDate: new Date().toISOString().split('T')[0],
                 type: 'Անդամավճար',
-                paidBy: 'Ծնող',
-                leaderName: formData.leaderName,
+                notes: '',
                 membershipMonths: [],
                 uniformItem: 'Շապիկ',
                 uniformSize: 'M'
@@ -356,54 +392,56 @@
         const ReceiptCard = ({ data }) => {
             const extraDetails = getDetailsString(data);
             return (
-                <div id="receipt-container" className="receipt-paper">
-                    <div className="watermark">PAID</div>
-                    <div className="flex flex-col items-center mb-4">
-                        <img 
-                            src="AYA.png" 
-                            alt="AYA Logo" 
-                            className="h-20 object-contain mb-2"
-                            onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
-                        />
-                        <div className="hidden"><Icons.Shield className="w-16 h-16 text-blue-900" /></div>
-                        <h2 className="text-xl font-bold text-gray-900 tracking-tight mt-2 uppercase">Վճարման Անդորրագիր</h2>
-                        <p className="text-xs text-gray-500 font-mono">{data.id}</p>
-                    </div>
+                <div className="receipt-container">
+                    <div className="receipt-paper">
+                        <div className="watermark">PAID</div>
+                        <div className="flex flex-col items-center mb-4">
+                            <img 
+                                src="AYA.png" 
+                                alt="AYA Logo" 
+                                className="h-20 object-contain mb-2"
+                                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
+                            />
+                            <div className="hidden"><Icons.GoogleDrive className="w-16 h-16 text-blue-900" /></div>
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight mt-2 uppercase">Վճարման Անդորրագիր</h2>
+                            <p className="text-xs text-gray-500 font-mono">{data.id}</p>
+                        </div>
 
-                    <div className="space-y-4 text-base">
-                        <div className="receipt-row">
-                            <span className="text-gray-500">Ամսաթիվ</span>
-                            <span className="font-semibold">{data.paymentDate}</span>
-                        </div>
-                        <div className="receipt-row">
-                            <span className="text-gray-500">Սկաուտ</span>
-                            <span className="font-bold text-gray-800">{data.scoutName}</span>
-                        </div>
-                        <div className="receipt-row">
-                            <span className="text-gray-500">Նպատակ</span>
-                            <span className="text-gray-800 text-right">{data.type}</span>
-                        </div>
-                        
-                        {extraDetails && (
-                            <div className="bg-gray-50 p-2 rounded text-sm text-center border border-gray-100">
-                                <span className="text-gray-800 font-medium">{extraDetails}</span>
+                        <div className="space-y-4 text-base">
+                            <div className="receipt-row">
+                                <span className="text-gray-500">Ամսաթիվ</span>
+                                <span className="font-semibold">{data.paymentDate}</span>
                             </div>
-                        )}
+                            <div className="receipt-row">
+                                <span className="text-gray-500">Սկաուտ</span>
+                                <span className="font-bold text-gray-800">{data.scoutName}</span>
+                            </div>
+                            <div className="receipt-row">
+                                <span className="text-gray-500">Նպատակ</span>
+                                <span className="text-gray-800 text-right">{data.type}</span>
+                            </div>
+                            
+                            {extraDetails && (
+                                <div className="bg-gray-50 p-2 rounded text-sm text-center border border-gray-100">
+                                    <span className="text-gray-800 font-medium">{extraDetails}</span>
+                                </div>
+                            )}
 
-                        <div className="receipt-row pt-2 border-t border-dashed border-gray-300">
-                            <span className="text-gray-500">Գումար</span>
-                            <span className="text-3xl font-bold text-blue-900">֏{data.amount}</span>
+                            <div className="receipt-row pt-2 border-t border-dashed border-gray-300">
+                                <span className="text-gray-500">Գումար</span>
+                                <span className="text-3xl font-bold text-blue-900">֏{data.amount}</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="mt-8 pt-4 border-t border-gray-100 flex justify-between items-end">
-                        <div className="text-left">
-                            <p className="text-[12px] text-gray-400 uppercase tracking-widest">Վճարող</p>
-                            <p className="font-medium text-gray-700 text-base">{data.paidBy}</p>
-                        </div>
-                        <div className="text-right">
-                            <p className="text-[12px] text-gray-400 uppercase tracking-widest">Ստացող (Ղեկավար)</p>
-                            <p className="font-medium text-gray-700 text-base">{data.leaderName}</p>
+                        <div className="mt-8 pt-4 border-t border-gray-100 flex justify-between items-end">
+                            <div className="text-left">
+                                <p className="text-[12px] text-gray-400 uppercase tracking-widest">Վճարող</p>
+                                <p className="font-medium text-gray-700 text-base">{data.paidBy}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-[12px] text-gray-400 uppercase tracking-widest">Ստացող (Ղեկավար)</p>
+                                <p className="font-medium text-gray-700 text-base">{data.leaderName}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -424,8 +462,9 @@
 
                 <div className="max-w-md mx-auto p-6 pt-20">
                     <div className="text-center mb-8 relative z-10">
-                        <img src="AYA logo vahanig.png" alt="Logo" className="w-24 mx-auto mb-2 drop-shadow-xl" style={{animation:'levitate 6s ease-in-out infinite'}} />
+                        <img src="aya logo vahanig.png" alt="Logo" className="w-24 mx-auto mb-2 drop-shadow-xl" style={{animation:'levitate 6s ease-in-out infinite'}} />
                         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-500">Անդորրագրի Ստեղծում</h1>
+                        <p className="text-slate-400 text-sm font-medium">Ֆինանսական Գործիք</p>
                     </div>
 
                     <div className="glass-card">
@@ -433,20 +472,11 @@
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* PREFIX SELECTOR */}
                                 <div>
-                                    <label>Ընտրել ID Խումբ</label>
-                                    <div className="flex gap-2">
-                                        {['SA', 'KA', 'YK'].map(p => (
-                                            <button 
-                                                type="button" 
-                                                key={p} 
-                                                onClick={() => setFormData({...formData, prefix: p})} 
-                                                className={`flex-1 p-3 rounded-xl border font-bold transition ${formData.prefix === p ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-500'}`}
-                                            >
-                                                {p}
-                                            </button>
-                                        ))}
-                                    </div>
-                                    <p className="text-xs text-right mt-1 text-slate-400">ID կլինի: AYA-{formData.prefix}-XXXX</p>
+                                    <label>Ընտրել Ճյուղը (Prefix)</label>
+                                    <select name="prefix" value={formData.prefix} onChange={handleInputChange} className="font-bold text-indigo-900 bg-indigo-50">
+                                        {PREFIXES.map(p => <option key={p} value={p}>{p}</option>)}
+                                    </select>
+                                    <p className="text-xs text-slate-400 mt-1 ml-4">ID օրինակ՝ AYA-{formData.prefix}-0001-XX</p>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
@@ -530,22 +560,18 @@
                             <div>
                                 <ReceiptCard data={generatedReceipt} />
                                 
-                                <div className="space-y-3 mt-6">
-                                    {/* BUTTON 1: SAVE IMAGE */}
-                                    <button onClick={handleSaveImage} className="btn-secondary text-indigo-600 border-indigo-100 hover:bg-indigo-50">
-                                        <Icons.Image className="w-5 h-5"/> Save Image
+                                <div className="grid grid-cols-1 gap-3 mt-6">
+                                    <button onClick={handleSaveImage} className="btn-primary !bg-slate-800 !shadow-none">
+                                        <Icons.Image className="w-4 h-4"/> Save Image
                                     </button>
-                                    
-                                    {/* BUTTON 2: SEND AS PDF */}
-                                    <button onClick={handlePrintPDF} className="btn-secondary">
-                                        <Icons.FilePdf className="w-5 h-5"/> Send as PDF
+                                    <button onClick={handleSendPDF} className="btn-secondary text-slate-600">
+                                        <Icons.FilePdf className="w-4 h-4"/> Send as PDF
                                     </button>
-                                    
-                                    {/* BUTTON 3: DRIVE */}
                                     <button onClick={handleManualSaveToDrive} className="btn-secondary !text-green-600 !border-green-100">
-                                        <Icons.GoogleDrive className="w-5 h-5"/> Drive-ում
+                                        <Icons.GoogleDrive className="w-4 h-4"/> Save to Drive
                                     </button>
                                 </div>
+                                
                                 <button onClick={resetForm} className="w-full mt-6 py-3 text-sm font-semibold text-slate-400 hover:text-slate-600 transition">+ Նոր Վճարում</button>
                             </div>
                         )}
