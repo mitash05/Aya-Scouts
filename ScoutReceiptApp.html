@@ -212,6 +212,10 @@
         const [loading, setLoading] = useState(false);
         const [history, setHistory] = useState([]);
         const [generatedReceipt, setGeneratedReceipt] = useState(null);
+        
+        // NEW: State for scout names
+        const [scoutNames, setScoutNames] = useState([]);
+        const [loadingNames, setLoadingNames] = useState(false);
 
         // Armenian Constants
         const MONTHS = ['Հուն', 'Փետ', 'Մարտ', 'Ապր', 'Մայ', 'Հունիս', 'Հուլ', 'Օգոս', 'Սեպ', 'Հոկ', 'Նոյ', 'Դեկ'];
@@ -243,6 +247,21 @@
                 const sig = Math.floor(Math.random() * 90 + 10); // Random 10-99
                 localStorage.setItem('device_sig', sig.toString());
             }
+
+            // NEW: Fetch scout names on load
+            setLoadingNames(true);
+            fetch(`${GOOGLE_SCRIPT_URL}?action=getScouts`)
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data)) {
+                        setScoutNames(data);
+                    }
+                    setLoadingNames(false);
+                })
+                .catch(error => {
+                    console.error("Error fetching names:", error);
+                    setLoadingNames(false);
+                });
         }, []);
 
         const generateTxId = (selectedPrefix) => {
@@ -489,10 +508,27 @@
                                         <input type="number" name="amount" required placeholder="5000" className="font-bold text-lg" value={formData.amount} onChange={handleInputChange} />
                                     </div>
                                 </div>
+                                
+                                {/* MODIFIED: Scout Name with Datalist */}
                                 <div>
                                     <label>Սկաուտի Անուն</label>
-                                    <input type="text" name="scoutName" required placeholder="Արամ Արամյան" value={formData.scoutName} onChange={handleInputChange} />
+                                    <input 
+                                        type="text" 
+                                        name="scoutName" 
+                                        list="scout-names-list"
+                                        required 
+                                        placeholder={loadingNames ? "Բեռնվում են անունները..." : "Արամ Արամյան"} 
+                                        value={formData.scoutName} 
+                                        onChange={handleInputChange} 
+                                        autoComplete="off"
+                                    />
+                                    <datalist id="scout-names-list">
+                                        {scoutNames.map((name, index) => (
+                                            <option key={index} value={name} />
+                                        ))}
+                                    </datalist>
                                 </div>
+
                                 <div>
                                     <label>Վճարման Նպատակ</label>
                                     <select name="type" value={formData.type} onChange={(e) => {
