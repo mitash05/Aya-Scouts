@@ -475,39 +475,35 @@
                 overlay.style.display = 'flex';
                 overlay.innerHTML = '<div style="animation:spin 1s linear infinite">⏳</div>';
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const rawBase64 = e.target.result.split(',')[1];
-                    
-                    fetch(WEB_APP_URL, {
-                        method: "POST",
-                        body: JSON.stringify({
-                            action: "upload",
-                            password: verifiedPassword, // Use the verified one
-                            folderType: currentMode,
-                            folderName: folderName,
-                            selectedFolder: folderName,
-                            uploaderName: uploader,
-                            file: rawBase64,
-                            mimeType: file.type,
-                            filename: file.name
-                        }),
-                        headers: { "Content-Type": "text/plain" }
-                    })
-                    .then(r => r.json())
-                    .then(data => {
-                        if (data.result === 'success') markSuccess(index);
-                        else markError(index);
-                    })
-                    .catch(() => markError(index))
-                    .finally(() => {
-                        completed++;
-                        updateProgress(completed);
-                        uploadLoop().then(resolve);
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
+// NEW CODE (Inside uploadLoop)
+compressImage(file).then(processed => {
+    fetch(WEB_APP_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            action: "upload",
+            password: verifiedPassword,
+            folderType: currentMode,
+            folderName: folderName,
+            selectedFolder: folderName,
+            uploaderName: uploader,
+            file: processed.data,      // Compressed Data
+            mimeType: processed.type,  // New Mime Type (image/jpeg)
+            filename: processed.name   // New Filename (.jpg)
+        }),
+        headers: { "Content-Type": "text/plain" }
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.result === 'success') markSuccess(index);
+        else markError(index);
+    })
+    .catch(() => markError(index))
+    .finally(() => {
+        completed++;
+        updateProgress(completed);
+        uploadLoop().then(resolve);
+    });
+});
         };
 
         const threads = [];
@@ -582,6 +578,58 @@
             }
         });
     }
+
+    // --- NEW: COMPRESSION HELPER ---
+function compressImage(file) {
+    return new Promise((resolve) => {
+        // If not an image (e.g. video), return original file
+        if (!file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve({ 
+                data: e.target.result.split(',')[1], 
+                name: file.name, 
+                type: file.type 
+            });
+            reader.readAsDataURL(file);
+            return;
+        }
+
+        // If Image -> Compress
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+// --- CHANGE 1: Higher Resolution Limit ---
+            // 2560px is "2K" resolution. Sharp enough for full-screen on laptops.
+            const MAX_DIM = 2560; 
+            
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_DIM) { height *= MAX_DIM / width; width = MAX_DIM; }
+            } else {
+                if (height > MAX_DIM) { width *= MAX_DIM / height; height = MAX_DIM; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+// --- CHANGE 2: Higher JPEG Quality ---
+            // 0.9 (90%) keeps almost all detail.
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            
+            resolve({ 
+                data: dataUrl.split(',')[1], 
+                name: file.name.replace(/\.[^/.]+$/, "") + ".jpg", // Force extension to jpg
+                type: 'image/jpeg' 
+            });
+        };
+    });
+}
 </script>
 
 </body>
