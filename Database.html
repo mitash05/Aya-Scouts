@@ -284,10 +284,6 @@
     </style>
 </head>
 <body>
-
-    <a href="index.html" style="position: absolute; top: 20px; left: 20px; z-index: 100; text-decoration: none; font-size: 24px; background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-    🏠
-</a>
     
     <div class="ambient-light">
         <div class="orb orb-1"></div>
@@ -345,9 +341,9 @@
                             <label>Ծննդավայր / Birthplace</label>
                             <input type="text" name="Ծննդավայր" id="birthplaceInput" class="capitalize" required>
                             <div class="chips-container">
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Yerevan')">Yerevan, Armenia</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Aleppo')">Aleppo, Syria</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Beirut')">Beirut, Lebanon</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Yerevan, Armenia')">Yerevan, Armenia</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Aleppo, Syria')">Aleppo, Syria</span>
+                                <span class="chip" onclick="setValue('birthplaceInput', 'Beirut, Lebanon')">Beirut, Lebanon</span>
                             </div>
                         </div>
                     </div>
@@ -540,7 +536,6 @@ document.querySelectorAll('input[type="tel"]').forEach(input => {
 
 </body>
 </html>
-
 
 
 
