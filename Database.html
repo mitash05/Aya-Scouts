@@ -340,11 +340,6 @@
                         <div class="form-group">
                             <label>Ծննդավայր / Birthplace</label>
                             <input type="text" name="Ծննդավայր" id="birthplaceInput" class="capitalize" required>
-                            <div class="chips-container">
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Yerevan, Armenia')">Yerevan, Armenia</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Aleppo, Syria')">Aleppo, Syria</span>
-                                <span class="chip" onclick="setValue('birthplaceInput', 'Beirut, Lebanon')">Beirut, Lebanon</span>
-                            </div>
                         </div>
                     </div>
 
@@ -360,21 +355,21 @@
 
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Հոր Անուն / Father's Name</label>
+                            <label>Հոր Անուն Ազգանուն / Father's Name</label>
                             <input type="text" name="Հոր անուն ազգանուն։" class="capitalize">
                         </div>
                         <div class="form-group">
-                            <label>Հոր Հեռախոս / Father's Phone</label>
+                            <label>Հոր Հեռախոսահամար / Father's Phone number</label>
                             <input type="tel" name="Հոր հեռախոսահամար։" placeholder="(0XX) XX-XX-XX">
                         </div>
                     </div>
                     <div class="grid-2">
                         <div class="form-group">
-                            <label>Մոր Անուն / Mother's Name</label>
+                            <label>Մոր Անուն Ազգանուն / Mother's Name</label>
                             <input type="text" name="Մոր անուն ազգանուն։" class="capitalize">
                         </div>
                         <div class="form-group">
-                            <label>Մոր Հեռախոս / Mother's Phone</label>
+                            <label>Մոր Հեռախոսահամար / Mother's Phone number</label>
                             <input type="tel" name="Մոր հեռախոսահամար։" placeholder="(0XX) XX-XX-XX">
                         </div>
                     </div>
@@ -395,8 +390,6 @@
                         <textarea name="Ալերգիա կամ առողջական խնդիրներ։" id="healthInput" rows="2" placeholder="Start typing..."></textarea>
                         <div class="chips-container">
                             <span class="chip" style="color:#10b981; border-color: #10b981;" onclick="setNone('healthInput')">✅ Չունի / None</span>
-                            <span class="chip" onclick="addHealth('healthInput', 'Փոշի / Dust Allergy')">🤧 Փոշի / Dust</span>
-                            <span class="chip" onclick="addHealth('healthInput', 'Սեզոնային / Seasonal Allergy')">🌸 Սեզոնային / Seasonal</span>
                         </div>
                     </div>
 
