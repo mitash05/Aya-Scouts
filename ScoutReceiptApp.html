@@ -15,165 +15,35 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* GLOBAL STYLES & GLASSMORPHISM */
-        :root {
-          --primary: #4f46e5;
-          --primary-glow: rgba(79, 70, 229, 0.4);
-          --text-main: #1e293b;
-          --text-light: #64748b;
-          --glass-surface: rgba(255, 255, 255, 0.65);
-          --glass-border: rgba(255, 255, 255, 0.8);
-          --input-bg: rgba(255, 255, 255, 0.6);
-        }
-        body {
-          font-family: 'Outfit', 'Noto Sans Armenian', sans-serif;
-          margin: 0;
-          color: var(--text-main);
-          background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-          min-height: 100vh;
-        }
-        
-        /* AMBIENT BACKGROUND */
+        /* SAME STYLES AS BEFORE */
+        :root { --primary: #4f46e5; --primary-glow: rgba(79, 70, 229, 0.4); --text-main: #1e293b; --text-light: #64748b; --glass-surface: rgba(255, 255, 255, 0.65); --glass-border: rgba(255, 255, 255, 0.8); --input-bg: rgba(255, 255, 255, 0.6); }
+        body { font-family: 'Outfit', 'Noto Sans Armenian', sans-serif; margin: 0; color: var(--text-main); background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); min-height: 100vh; }
         .ambient-light { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 20s infinite ease-in-out; }
         .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #818cf8 0%, rgba(129,140,248,0) 70%); }
         .orb-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #f472b6 0%, rgba(244,114,182,0) 70%); animation-delay: -5s; }
         @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
-
-        /* GLASS CARD */
-        .glass-card {
-          background: var(--glass-surface);
-          backdrop-filter: blur(25px);
-          -webkit-backdrop-filter: blur(25px);
-          border: 1px solid var(--glass-border);
-          box-shadow: 0 20px 50px -10px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset;
-          border-radius: 32px;
-          padding: 30px;
-          margin-bottom: 80px;
-        }
-
-        /* INPUTS - REFINED PADDING */
-        input, select {
-          width: 100%; 
-          padding: 16px 12px 16px 24px !important;
-          font-size: 18px;
-          border: 1px solid rgba(136, 136, 136, 0.2);
-          border-radius: 20px; 
-          background: var(--input-bg); 
-          color: var(--text-main);
-          font-family: inherit; 
-          transition: 0.3s; 
-          outline: none;
-          box-sizing: border-box;
-          -webkit-appearance: none;
-          -moz-appearance: none;
-          appearance: none;
-        }
-        
+        .glass-card { background: var(--glass-surface); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid var(--glass-border); box-shadow: 0 20px 50px -10px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset; border-radius: 32px; padding: 30px; margin-bottom: 80px; }
+        input, select { width: 100%; padding: 16px 12px 16px 24px !important; font-size: 18px; border: 1px solid rgba(136, 136, 136, 0.2); border-radius: 20px; background: var(--input-bg); color: var(--text-main); font-family: inherit; transition: 0.3s; outline: none; box-sizing: border-box; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
         input[type="date"] { display: block; }
-        
-        input:focus, select:focus {
-          background: white; 
-          box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-          border-color: rgba(79, 70, 229, 0.3); 
-          transform: translateY(-1px);
-        }
-
-        /* Custom arrow for Select */
-        select {
-          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-          background-position: right 1rem center;
-          background-repeat: no-repeat;
-          background-size: 1.5em 1.5em;
-          padding-right: 2.5rem !important;
-        }
-
-        label {
-          display: block; 
-          font-size: 14px;
-          font-weight: 700; 
-          margin-bottom: 10px;
-          color: var(--text-light); 
-          margin-left: 20px;
-          text-transform: uppercase; 
-          letter-spacing: 0.8px;
-        }
-
-        /* BUTTONS */
-        .btn-primary {
-          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-          color: white; border: none; width: 100%; padding: 22px;
-          font-size: 17px; font-weight: 700; border-radius: 24px;
-          cursor: pointer; box-shadow: 0 10px 30px -5px var(--primary-glow);
-          transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
+        input:focus, select:focus { background: white; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); border-color: rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
+        select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 1rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem !important; }
+        label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--text-light); margin-left: 20px; text-transform: uppercase; letter-spacing: 0.8px; }
+        .btn-primary { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; width: 100%; padding: 22px; font-size: 17px; font-weight: 700; border-radius: 24px; cursor: pointer; box-shadow: 0 10px 30px -5px var(--primary-glow); transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-primary:active { transform: scale(0.98); }
-        .btn-secondary {
-          background: white; color: var(--text-main); border: 1px solid rgba(0,0,0,0.1);
-          padding: 18px; border-radius: 18px; font-weight: 600; cursor: pointer;
-          display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s;
-        }
+        .btn-secondary { background: white; color: var(--text-main); border: 1px solid rgba(0,0,0,0.1); padding: 18px; border-radius: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .btn-secondary:hover { background: #f8fafc; transform: translateY(-2px); }
-
-        /* RECEIPT VISUALS */
-        .receipt-container {
-            padding: 10px;
-            background: #f1f5f9;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .receipt-paper {
-          background: white !important; padding: 30px; border-radius: 4px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid #1e293b;
-          position: relative; overflow: hidden;
-          /* Ensure background graphics print */
-          -webkit-print-color-adjust: exact !important;
-          print-color-adjust: exact !important;
-        }
-        .watermark {
-          position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
-          font-size: 80px; font-weight: 900; color: rgba(0,0,0,0.03);
-          pointer-events: none; border: 4px solid rgba(0,0,0,0.03); border-radius: 50%; padding: 20px;
-        }
+        .receipt-container { padding: 10px; background: #f1f5f9; border-radius: 10px; margin-bottom: 20px; }
+        .receipt-paper { background: white !important; padding: 30px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid #1e293b; position: relative; overflow: hidden; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 80px; font-weight: 900; color: rgba(0,0,0,0.03); pointer-events: none; border: 4px solid rgba(0,0,0,0.03); border-radius: 50%; padding: 20px; }
         .receipt-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #f1f5f9; padding-bottom: 10px; }
         .receipt-row:last-child { border-bottom: none; }
-
-        /* CHIPS */
-        .chip {
-          padding: 10px 14px; border-radius: 12px; font-size: 14px; font-weight: 600;
-          border: 1px solid rgba(79, 70, 229, 0.2); background: rgba(79, 70, 229, 0.05);
-          color: var(--primary); cursor: pointer; transition: 0.2s;
-        }
+        .chip { padding: 10px 14px; border-radius: 12px; font-size: 14px; font-weight: 600; border: 1px solid rgba(79, 70, 229, 0.2); background: rgba(79, 70, 229, 0.05); color: var(--primary); cursor: pointer; transition: 0.2s; }
         .chip.active { background: var(--primary); color: white; }
-
-        /* NAV */
-        nav {
-          position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-          background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
-          border-radius: 100px; padding: 10px 20px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-          border: 1px solid rgba(255,255,255,0.5);
-          display: flex; gap: 10px; z-index: 100;
-        }
-        .nav-item {
-          width: 50px; height: 50px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          color: #94a3b8; transition: 0.3s; cursor: pointer;
-        }
+        nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-radius: 100px; padding: 10px 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.5); display: flex; gap: 10px; z-index: 100; }
+        .nav-item { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #94a3b8; transition: 0.3s; cursor: pointer; }
         .nav-item.active { background: #1e293b; color: white; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-
-        /* PRINT STYLES */
-        @media print {
-          body * { visibility: hidden; }
-          .receipt-paper, .receipt-paper * { visibility: visible; }
-          .receipt-paper { 
-              position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: 1px solid #ddd;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-          }
-          .receipt-container { background: white; }
-        }
-        
+        @media print { body * { visibility: hidden; } .receipt-paper, .receipt-paper * { visibility: visible; } .receipt-paper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: 1px solid #ddd; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } .receipt-container { background: white; } }
         @keyframes levitate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     </style>
 </head>
@@ -191,14 +61,10 @@
         Save: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>,
         Image: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
         FilePdf: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>,
-        GoogleDrive: (props) => (
-            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 87.3 78" fill="currentColor">
-                <path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3l13.75-23.8h-27.5c0 1.55.4 3.1 1.2 4.5z" fill="#0066DA"/>
-                <path d="M43.65 25l13.75-23.8c-1.35-.8-2.9-1.2-4.5-1.2h-18.5c-1.6 0-3.15.45-4.5 1.2l13.75 23.8z" fill="#00AC47"/>
-                <path d="M73.55 76.8c1.35-.8 2.5-1.9 3.3-3.3l1.6-2.75 7.65-13.25c.8-1.4 1.2-2.95 1.2-4.5h-27.5l13.75 23.8z" fill="#EA4335"/>
-                <path d="M43.65 25L27.5 53.05l-13.75 23.8 26.1 45.1h27.5L43.65 25z" fill="#00AC47" opacity="0"/>
-                <path d="M73.55 76.8L59.8 53.05 43.65 25 27.5 53.05h27.5l1.8 3.1 13.75 23.8z" fill="#2684FC" opacity="0"/>
-                <path d="M20.9 25L7.15 48.8c-.8 1.4-1.2 2.95-1.2 4.5l13.75-23.8L33.45 2.15c-1.35.8-2.5 1.9-3.3 3.3L20.9 25z" fill="#FFBA00"/>
+        GoogleDrive: (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>,
+        WhatsApp: (props) => (
+            <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
             </svg>
         )
     };
@@ -213,8 +79,8 @@
         const [history, setHistory] = useState([]);
         const [generatedReceipt, setGeneratedReceipt] = useState(null);
         
-        // NEW: State for scout names
-        const [scoutNames, setScoutNames] = useState([]);
+        // --- NEW STATE: Scout Names with Phones ---
+        const [scoutList, setScoutList] = useState([]); // Array of objects {name, phone}
         const [loadingNames, setLoadingNames] = useState(false);
 
         // Armenian Constants
@@ -227,6 +93,7 @@
         const [formData, setFormData] = useState({
             prefix: 'SA',
             scoutName: '',
+            parentPhone: '', // NEW FIELD
             amount: '',
             paymentDate: new Date().toISOString().split('T')[0],
             type: 'Անդամավճար',
@@ -242,19 +109,18 @@
             const savedHistory = localStorage.getItem('scout_payment_history');
             if (savedHistory) setHistory(JSON.parse(savedHistory));
             
-            // Generate a unique device signature if not exists (To prevent collision)
             if(!localStorage.getItem('device_sig')) {
-                const sig = Math.floor(Math.random() * 90 + 10); // Random 10-99
+                const sig = Math.floor(Math.random() * 90 + 10);
                 localStorage.setItem('device_sig', sig.toString());
             }
 
-            // NEW: Fetch scout names on load
+            // --- FETCH NAMES & PHONES ---
             setLoadingNames(true);
             fetch(`${GOOGLE_SCRIPT_URL}?action=getScouts`)
                 .then(response => response.json())
                 .then(data => {
                     if (Array.isArray(data)) {
-                        setScoutNames(data);
+                        setScoutList(data); // Expecting [{name: "Aram", phone: "37499112233"}]
                     }
                     setLoadingNames(false);
                 })
@@ -265,26 +131,29 @@
         }, []);
 
         const generateTxId = (selectedPrefix) => {
-            // Get sequence SPECIFIC to the selected prefix (SA, KA, YK)
             const storageKey = `scout_receipt_sequence_${selectedPrefix}`;
             let currentSeq = parseInt(localStorage.getItem(storageKey) || '0');
             let nextSeq = currentSeq + 1;
-            
-            // Save new sequence
             localStorage.setItem(storageKey, nextSeq.toString());
-            
-            // Format: AYA-SA-0001
             const seqStr = nextSeq.toString().padStart(4, '0');
-            
-            // Get Device Signature (To prevent duplicate AYA-SA-0001 on different phones)
             const devSig = localStorage.getItem('device_sig') || '00';
-            
             return `AYA-${selectedPrefix}-${seqStr}-${devSig}`;
         };
 
         const handleInputChange = (e) => {
             const { name, value } = e.target;
-            setFormData(prev => ({ ...prev, [name]: value }));
+            
+            // SPECIAL HANDLING FOR SCOUT NAME TO AUTO-FILL PHONE
+            if (name === 'scoutName') {
+                const foundScout = scoutList.find(s => s.name === value);
+                if (foundScout && foundScout.phone) {
+                    setFormData(prev => ({ ...prev, scoutName: value, parentPhone: foundScout.phone }));
+                } else {
+                    setFormData(prev => ({ ...prev, [name]: value }));
+                }
+            } else {
+                setFormData(prev => ({ ...prev, [name]: value }));
+            }
         };
 
         const toggleMonth = (month) => {
@@ -332,15 +201,8 @@
         const handleSubmit = async (e) => {
             e.preventDefault();
             setLoading(true);
-
-            // Generate ID based on the selected Prefix
             const newId = generateTxId(formData.prefix);
-
-            const newReceipt = {
-                ...formData,
-                id: newId,
-                timestamp: new Date().toISOString() 
-            };
+            const newReceipt = { ...formData, id: newId, timestamp: new Date().toISOString() };
 
             const updatedHistory = [newReceipt, ...history];
             setHistory(updatedHistory);
@@ -361,22 +223,6 @@
             alert("Պահանջը ուղարկված է Google Drive!");
         };
 
-        const getDetailsString = (data) => {
-            if (data.type === 'Անդամավճար') {
-                return data.membershipMonths && data.membershipMonths.length > 0 
-                    ? `Ամիսներ: ${data.membershipMonths.join(', ')}` 
-                    : '';
-            }
-            if (data.type === 'Տարազ') {
-                let str = data.uniformItem;
-                if (ITEMS_WITH_SIZE.includes(data.uniformItem)) {
-                    str += ` (Չափս: ${data.uniformSize})`;
-                }
-                return str;
-            }
-            return '';
-        };
-
         const handleSaveImage = () => {
             const element = document.querySelector(".receipt-paper");
             if(element) {
@@ -389,14 +235,37 @@
             }
         };
 
-        const handleSendPDF = () => {
-            window.print();
+        // --- WHATSAPP LOGIC ---
+        const handleSendWhatsApp = () => {
+            if (!generatedReceipt || !generatedReceipt.parentPhone) {
+                alert("Հեռախոսահամարը բացակայում է:");
+                return;
+            }
+
+            // Clean phone number (remove +, spaces, etc)
+            let phone = generatedReceipt.parentPhone.replace(/[^0-9]/g, '');
+            // Ensure 374 prefix if missing (simple check)
+            if (phone.length === 9 && phone.startsWith('0')) phone = '374' + phone.substring(1); // 091 -> 37491
+            if (phone.length === 8) phone = '374' + phone;
+
+            let message = `Հարգելի Ծնող,\n\nAYA Սկաուտական շարժման համար ստացանք վճարում:\n\n`;
+            message += `Սկաուտ: ${generatedReceipt.scoutName}\n`;
+            message += `Գումար: ${generatedReceipt.amount}֏\n`;
+            message += `Նպատակ: ${generatedReceipt.type}\n`;
+            message += `Ամսաթիվ: ${generatedReceipt.paymentDate}\n`;
+            message += `\nՇնորհակալություն:\nID: ${generatedReceipt.id}`;
+
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
         };
+
+        const handleSendPDF = () => { window.print(); };
 
         const resetForm = () => {
             setFormData({
                 ...formData,
                 scoutName: '',
+                parentPhone: '',
                 amount: '',
                 type: 'Անդամավճար',
                 notes: '',
@@ -407,6 +276,16 @@
             setGeneratedReceipt(null);
             setActiveTab('new');
         };
+        
+        const getDetailsString = (data) => {
+            if (data.type === 'Անդամավճար') return data.membershipMonths && data.membershipMonths.length > 0 ? `Ամիսներ: ${data.membershipMonths.join(', ')}` : '';
+            if (data.type === 'Տարազ') {
+                let str = data.uniformItem;
+                if (ITEMS_WITH_SIZE.includes(data.uniformItem)) str += ` (Չափս: ${data.uniformSize})`;
+                return str;
+            }
+            return '';
+        };
 
         const ReceiptCard = ({ data }) => {
             const extraDetails = getDetailsString(data);
@@ -415,52 +294,21 @@
                     <div className="receipt-paper">
                         <div className="watermark">PAID</div>
                         <div className="flex flex-col items-center mb-4">
-                            <img 
-                                src="AYA.png" 
-                                alt="AYA Logo" 
-                                className="h-20 object-contain mb-2"
-                                onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
-                            />
+                            <img src="AYA.png" alt="AYA Logo" className="h-20 object-contain mb-2" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }} />
                             <div className="hidden"><Icons.GoogleDrive className="w-16 h-16 text-blue-900" /></div>
                             <h2 className="text-xl font-bold text-gray-900 tracking-tight mt-2 uppercase">Վճարման Անդորրագիր</h2>
                             <p className="text-xs text-gray-500 font-mono">{data.id}</p>
                         </div>
-
                         <div className="space-y-4 text-base">
-                            <div className="receipt-row">
-                                <span className="text-gray-500">Ամսաթիվ</span>
-                                <span className="font-semibold">{data.paymentDate}</span>
-                            </div>
-                            <div className="receipt-row">
-                                <span className="text-gray-500">Սկաուտ</span>
-                                <span className="font-bold text-gray-800">{data.scoutName}</span>
-                            </div>
-                            <div className="receipt-row">
-                                <span className="text-gray-500">Նպատակ</span>
-                                <span className="text-gray-800 text-right">{data.type}</span>
-                            </div>
-                            
-                            {extraDetails && (
-                                <div className="bg-gray-50 p-2 rounded text-sm text-center border border-gray-100">
-                                    <span className="text-gray-800 font-medium">{extraDetails}</span>
-                                </div>
-                            )}
-
-                            <div className="receipt-row pt-2 border-t border-dashed border-gray-300">
-                                <span className="text-gray-500">Գումար</span>
-                                <span className="text-3xl font-bold text-blue-900">֏{data.amount}</span>
-                            </div>
+                            <div className="receipt-row"><span className="text-gray-500">Ամսաթիվ</span><span className="font-semibold">{data.paymentDate}</span></div>
+                            <div className="receipt-row"><span className="text-gray-500">Սկաուտ</span><span className="font-bold text-gray-800">{data.scoutName}</span></div>
+                            <div className="receipt-row"><span className="text-gray-500">Նպատակ</span><span className="text-gray-800 text-right">{data.type}</span></div>
+                            {extraDetails && <div className="bg-gray-50 p-2 rounded text-sm text-center border border-gray-100"><span className="text-gray-800 font-medium">{extraDetails}</span></div>}
+                            <div className="receipt-row pt-2 border-t border-dashed border-gray-300"><span className="text-gray-500">Գումար</span><span className="text-3xl font-bold text-blue-900">֏{data.amount}</span></div>
                         </div>
-
                         <div className="mt-8 pt-4 border-t border-gray-100 flex justify-between items-end">
-                            <div className="text-left">
-                                <p className="text-[12px] text-gray-400 uppercase tracking-widest">Վճարող</p>
-                                <p className="font-medium text-gray-700 text-base">{data.paidBy}</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-[12px] text-gray-400 uppercase tracking-widest">Ստացող (Ղեկավար)</p>
-                                <p className="font-medium text-gray-700 text-base">{data.leaderName}</p>
-                            </div>
+                            <div className="text-left"><p className="text-[12px] text-gray-400 uppercase tracking-widest">Վճարող</p><p className="font-medium text-gray-700 text-base">{data.paidBy}</p></div>
+                            <div className="text-right"><p className="text-[12px] text-gray-400 uppercase tracking-widest">Ստացող (Ղեկավար)</p><p className="font-medium text-gray-700 text-base">{data.leaderName}</p></div>
                         </div>
                     </div>
                 </div>
@@ -469,16 +317,8 @@
 
         return (
             <div>
-                {/* Home Button */}
-                <a href="index.html" style={{position: 'absolute', top: '20px', left: '20px', zIndex: 100, textDecoration: 'none', fontSize: '24px', background: 'rgba(255,255,255,0.2)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)', boxShadow: '0 4px 6px rgba(0,0,0,0.1)'}}>
-                    🏠
-                </a>
-
-                <div className="ambient-light">
-                    <div className="orb orb-1"></div>
-                    <div className="orb orb-2"></div>
-                </div>
-
+                <a href="index.html" style={{position: 'absolute', top: '20px', left: '20px', zIndex: 100, textDecoration: 'none', fontSize: '24px', background: 'rgba(255,255,255,0.2)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(5px)', boxShadow: '0 4px 6px rgba(0,0,0,0.1)'}}>🏠</a>
+                <div className="ambient-light"><div className="orb orb-1"></div><div className="orb orb-2"></div></div>
                 <div className="max-w-md mx-auto p-6 pt-20">
                     <div className="text-center mb-8 relative z-10">
                         <img src="aya logo vahanig.png" alt="Logo" className="w-24 mx-auto mb-2 drop-shadow-xl" style={{animation:'levitate 6s ease-in-out infinite'}} />
@@ -489,7 +329,6 @@
                     <div className="glass-card">
                         {activeTab === 'new' && (
                             <form onSubmit={handleSubmit} className="space-y-6">
-                                {/* PREFIX SELECTOR */}
                                 <div>
                                     <label>Ընտրել Ճյուղը (Prefix)</label>
                                     <select name="prefix" value={formData.prefix} onChange={handleInputChange} className="font-bold text-indigo-900 bg-indigo-50">
@@ -497,36 +336,25 @@
                                     </select>
                                     <p className="text-xs text-slate-400 mt-1 ml-4">ID օրինակ՝ AYA-{formData.prefix}-0001-XX</p>
                                 </div>
-
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label>Ամսաթիվ</label>
-                                        <input type="date" name="paymentDate" required value={formData.paymentDate} onChange={handleInputChange} />
-                                    </div>
-                                    <div>
-                                        <label>Գումար (֏)</label>
-                                        <input type="number" name="amount" required placeholder="5000" className="font-bold text-lg" value={formData.amount} onChange={handleInputChange} />
-                                    </div>
+                                    <div><label>Ամսաթիվ</label><input type="date" name="paymentDate" required value={formData.paymentDate} onChange={handleInputChange} /></div>
+                                    <div><label>Գումար (֏)</label><input type="number" name="amount" required placeholder="5000" className="font-bold text-lg" value={formData.amount} onChange={handleInputChange} /></div>
                                 </div>
                                 
-                                {/* MODIFIED: Scout Name with Datalist */}
+                                {/* SCOUT NAME & PHONE */}
                                 <div>
                                     <label>Սկաուտի Անուն</label>
-                                    <input 
-                                        type="text" 
-                                        name="scoutName" 
-                                        list="scout-names-list"
-                                        required 
-                                        placeholder={loadingNames ? "Բեռնվում են անունները..." : "Արամ Արամյան"} 
-                                        value={formData.scoutName} 
-                                        onChange={handleInputChange} 
-                                        autoComplete="off"
+                                    <input type="text" name="scoutName" list="scout-names-list" required 
+                                        placeholder={loadingNames ? "Բեռնվում են..." : "Արամ Արամյան"} 
+                                        value={formData.scoutName} onChange={handleInputChange} autoComplete="off"
                                     />
                                     <datalist id="scout-names-list">
-                                        {scoutNames.map((name, index) => (
-                                            <option key={index} value={name} />
-                                        ))}
+                                        {scoutList.map((s, index) => <option key={index} value={s.name} />)}
                                     </datalist>
+                                </div>
+                                <div>
+                                    <label>Ծնողի Հեռախոս (WhatsApp)</label>
+                                    <input type="text" name="parentPhone" placeholder="374..." value={formData.parentPhone} onChange={handleInputChange} className="bg-green-50 text-green-800" />
                                 </div>
 
                                 <div>
@@ -546,29 +374,14 @@
                                     <div className="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
                                         <label className="!text-indigo-900 !ml-0 mb-3">Ընտրել Ամիսներ</label>
                                         <div className="grid grid-cols-4 gap-2">
-                                            {MONTHS.map(m => (
-                                                <button key={m} type="button" onClick={() => toggleMonth(m)} className={`chip ${formData.membershipMonths.includes(m) ? 'active' : ''}`}>{m}</button>
-                                            ))}
+                                            {MONTHS.map(m => <button key={m} type="button" onClick={() => toggleMonth(m)} className={`chip ${formData.membershipMonths.includes(m) ? 'active' : ''}`}>{m}</button>)}
                                         </div>
                                     </div>
                                 )}
-
                                 {formData.type === 'Տարազ' && (
                                     <div className="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 grid grid-cols-2 gap-3">
-                                        <div>
-                                            <label className="!text-indigo-900 !ml-0">Տեսակ</label>
-                                            <select name="uniformItem" value={formData.uniformItem} onChange={handleInputChange}>
-                                                {UNIFORM_ITEMS.map(item => <option key={item} value={item}>{item}</option>)}
-                                            </select>
-                                        </div>
-                                        {ITEMS_WITH_SIZE.includes(formData.uniformItem) && (
-                                            <div>
-                                                <label className="!text-indigo-900 !ml-0">Չափս</label>
-                                                <select name="uniformSize" value={formData.uniformSize} onChange={handleInputChange}>
-                                                    {SIZES.map(s => <option key={s} value={s}>{s}</option>)}
-                                                </select>
-                                            </div>
-                                        )}
+                                        <div><label className="!text-indigo-900 !ml-0">Տեսակ</label><select name="uniformItem" value={formData.uniformItem} onChange={handleInputChange}>{UNIFORM_ITEMS.map(item => <option key={item} value={item}>{item}</option>)}</select></div>
+                                        {ITEMS_WITH_SIZE.includes(formData.uniformItem) && <div><label className="!text-indigo-900 !ml-0">Չափս</label><select name="uniformSize" value={formData.uniformSize} onChange={handleInputChange}>{SIZES.map(s => <option key={s} value={s}>{s}</option>)}</select></div>}
                                     </div>
                                 )}
 
@@ -579,34 +392,23 @@
                                         <button type="button" onClick={() => setFormData({...formData, paidBy: 'Սկաուտ'})} className={`flex-1 p-3 rounded-xl border font-semibold text-sm transition ${formData.paidBy === 'Սկաուտ' ? 'bg-slate-800 text-white border-slate-800' : 'bg-white text-slate-500 hover:bg-slate-50'}`}>Սկաուտ</button>
                                     </div>
                                 </div>
+                                <div><label>Ստացող (Ղեկավար)</label><input type="text" name="leaderName" required placeholder="Ղեկավարի Անուն" value={formData.leaderName} onChange={handleInputChange} /></div>
 
-                                <div>
-                                    <label>Ստացող (Ղեկավար)</label>
-                                    <input type="text" name="leaderName" required placeholder="Ղեկավարի Անուն" value={formData.leaderName} onChange={handleInputChange} />
-                                </div>
-
-                                <button type="submit" disabled={loading} className="btn-primary">
-                                    {loading ? 'Ստեղծվում է...' : <><Icons.Save className="w-5 h-5" /> Ստեղծել Անդորրագիր</>}
-                                </button>
+                                <button type="submit" disabled={loading} className="btn-primary">{loading ? 'Ստեղծվում է...' : <><Icons.Save className="w-5 h-5" /> Ստեղծել Անդորրագիր</>}</button>
                             </form>
                         )}
 
                         {activeTab === 'receipt' && generatedReceipt && (
                             <div>
                                 <ReceiptCard data={generatedReceipt} />
-                                
                                 <div className="grid grid-cols-1 gap-3 mt-6">
-                                    <button onClick={handleSaveImage} className="btn-primary !bg-slate-800 !shadow-none">
-                                        <Icons.Image className="w-4 h-4"/> Save Image
+                                    <button onClick={handleSendWhatsApp} className="btn-primary !bg-[#25D366] !shadow-none !text-white">
+                                        <Icons.WhatsApp className="w-5 h-5 fill-white"/> Ուղարկել WhatsApp
                                     </button>
-                                    <button onClick={handleSendPDF} className="btn-secondary text-slate-600">
-                                        <Icons.FilePdf className="w-4 h-4"/> Send as PDF
-                                    </button>
-                                    <button onClick={handleManualSaveToDrive} className="btn-secondary !text-green-600 !border-green-100">
-                                        <Icons.GoogleDrive className="w-4 h-4"/> Save to Drive
-                                    </button>
+                                    <button onClick={handleSaveImage} className="btn-secondary text-slate-600"><Icons.Image className="w-4 h-4"/> Save Image</button>
+                                    <button onClick={handleSendPDF} className="btn-secondary text-slate-600"><Icons.FilePdf className="w-4 h-4"/> Send as PDF</button>
+                                    <button onClick={handleManualSaveToDrive} className="btn-secondary !text-green-600 !border-green-100"><Icons.GoogleDrive className="w-4 h-4"/> Save to Drive</button>
                                 </div>
-                                
                                 <button onClick={resetForm} className="w-full mt-6 py-3 text-sm font-semibold text-slate-400 hover:text-slate-600 transition">+ Նոր Վճարում</button>
                             </div>
                         )}
@@ -614,31 +416,18 @@
                         {activeTab === 'history' && (
                             <div>
                                 <h2 className="text-xl font-bold mb-4">Պատմություն</h2>
-                                {history.length === 0 ? (
-                                    <div className="text-center py-10 text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl">Դեռ անդորրագրեր չկան</div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        {history.map((item) => (
-                                            <div key={item.id} onClick={() => { setGeneratedReceipt(item); setActiveTab('receipt'); }}
-                                                className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer hover:shadow-md transition"
-                                            >
-                                                <div>
-                                                    <p className="font-bold text-slate-800">{item.scoutName}</p>
-                                                    <p className="text-xs text-slate-500">{item.paymentDate} • {item.type}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="font-bold text-indigo-600">֏{item.amount}</p>
-                                                    <p className="text-[10px] text-slate-400">{item.id}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                {history.length === 0 ? <div className="text-center py-10 text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl">Դեռ անդորրագրեր չկան</div> : 
+                                    <div className="space-y-3">{history.map((item) => (
+                                        <div key={item.id} onClick={() => { setGeneratedReceipt(item); setActiveTab('receipt'); }} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex justify-between items-center cursor-pointer hover:shadow-md transition">
+                                            <div><p className="font-bold text-slate-800">{item.scoutName}</p><p className="text-xs text-slate-500">{item.paymentDate} • {item.type}</p></div>
+                                            <div className="text-right"><p className="font-bold text-indigo-600">֏{item.amount}</p><p className="text-[10px] text-slate-400">{item.id}</p></div>
+                                        </div>
+                                    ))}</div>
+                                }
                             </div>
                         )}
                     </div>
                 </div>
-
                 <nav>
                     <div className={`nav-item ${activeTab === 'new' ? 'active' : ''}`} onClick={() => setActiveTab('new')}><Icons.FileText className="w-6 h-6" /></div>
                     <div className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}><Icons.History className="w-6 h-6" /></div>
